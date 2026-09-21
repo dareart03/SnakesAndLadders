@@ -5,8 +5,17 @@ import Foundation
 // ============================================================
 
 /// Печатает события игры в консоль на русском языке.
+/// Если включён «тихий» режим — молчит (полезно для турнира).
 final class GameLogger: GameEventObserver {
+    private let silent: Bool
+
+    init(silent: Bool = false) {
+        self.silent = silent
+    }
+
     func receive(event: GameEvent) {
+        guard !silent else { return }
+
         switch event {
         case .gameStarted(let title):
             print("=== Началась новая игра: \(title) ===")
@@ -16,7 +25,6 @@ final class GameLogger: GameEventObserver {
             print("Цикл \(number):")
 
         case .turnStarted(let player):
-            // Отступ перед фразой о броске
             print("   \(player) бросает кубик")
 
         case .diceRolled(_, let value):
